@@ -4,7 +4,7 @@ gTranslate is a JavaScript library to use with Google Cloud Translation API (v3b
 
 ## Usage
 
-1. Include the script
+1. **Include the script**
 
 Include gTranslate on your website (ideally in the `<HEAD>` section) using a script tag:
 
@@ -12,7 +12,7 @@ Include gTranslate on your website (ideally in the `<HEAD>` section) using a scr
 <script type="text/javascript src="path_to_file/gTranslate.js"></script>
 ```
 
-2. Initialize gTranslate
+2. **Initialize gTranslate**
 
 Call the `init` method and pass the configuration:
 
@@ -24,11 +24,49 @@ gTranslate.init({
 
 ```
 
+> gTranslate does not handle API authentication. You will need to provide gTranslate with a proxy URL which is already authenticated with with the Google Cloud Translation API `apiProxy` over OAuth 2.0. The proxy URL should forward the incoming POST payload from gTranslate along with the valid OAuth 2.0 headers.
+
 To change the language, call `gTranslate.setTargetLanguage` method with the target language code. E.g. for French:
 
 ```Javascript
 gTranslate.setTargetLanguage('fr');
 ```
 
+The `gTranslate.setTargetLanguage` method returns a promise which can be used to detect completion of page translation action. This can be useful if you want to show a loading screen or graphic as gTranslate can take a few seconds to complete the translation process. 
+
+Language preference is stored in `localStorage` with the key of `gTranslate_lang`. This is useful to keep the user preference persistent as they navigate from page to page on your website. To retrieve the language preference, simply run: 
+
+``` Javascript
+var langPreference = localStorage.getItem('gTranslate_lang');
+```
+
+A more complete example with a select dropdown: 
+
+**HTML**
+``` html
+<select id="select-lang">
+    <option value="en">English</option>
+    <option value="fr">French</option>
+    <option value="ru">Russian</option>
+</select>
+```
+
+**JavaScript**
+``` Javascript
+var langSelectField = document.getElementById('select-lang');
+langSelectField.value = localStorage.getItem('gTranslate_lang');
+
+langSelectField.addEventListener('change', function(e) {
+    var translatePromise = gTranslate.setTargetLanguage(e.target.value);
+    console.log("translating...");
+    translatePromise.then(function(response) {
+      if(response) {
+          console.log('translation completed')
+      } else {
+          console.log('translation failed');
+      }
+    }); 
+});
+```
 
 
