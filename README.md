@@ -8,13 +8,13 @@ googleTranslate is a JavaScript library to use with Google Cloud Translation API
 
 Include googleTranslate on your website (ideally in the `<HEAD>` section) using a script tag:
 
-```
+``` html
 <script type="text/javascript src="path_to_file/googleTranslate.js"></script>
 ```
 
 2. **Initialize googleTranslate**
 
-Call the `init` method and pass the configuration:
+Call the `init` method and pass the required configuration:
 
 ``` Javascript
 googleTranslate.init({
@@ -24,7 +24,9 @@ googleTranslate.init({
 
 ```
 
-> googleTranslate does not handle API authentication. You will need to provide googleTranslate with a proxy URL which is already authenticated with with the Google Cloud Translation API `apiProxy` over OAuth 2.0. The proxy URL should forward the incoming POST payload from googleTranslate along with the valid OAuth 2.0 headers.
+> googleTranslate does not handle API authentication. You will need to provide googleTranslate with a proxy URL i.e. `apiProxy`. This URL should forward the incoming POST payload from `googleTranslate` along with the valid OAuth 2.0 headers and API key param required by Google Cloud Translation API.
+
+3. **Translate**
 
 To change the language, call `googleTranslate.setTargetLanguage` method with the target language code. E.g. for French:
 
