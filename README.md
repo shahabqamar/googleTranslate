@@ -1,6 +1,37 @@
 # googleTranslate
 
-googleTranslate is a JavaScript library to use with Google Cloud Translation API (v3beta1) for webpages. It is meant to provide a replacement for now deprecated Google Translate for websites: https://translate.google.com/intl/en/about/website. 
+googleTranslate is a JavaScript library which uses with Google Cloud Translation API (v3beta1) to translate webpages. It is meant to provide a replacement/alternative for the now deprecated Google Translate for websites: https://translate.google.com/intl/en/about/website. 
+
+> googleTranslate does not handle API authentication. You will need to provide googleTranslate with a proxy URL i.e. `apiProxy`. This URL should forward the incoming POST payload from `googleTranslate` along with the valid OAuth 2.0 headers and API key param required by Google Cloud Translation API.
+
+An example of payload send by googleTranslate to `proxyApi` endpoint: 
+
+``` JSON
+{
+    "sourceLanguageCode":"en",
+    "targetLanguageCode":"fr",
+    "mimeType":"text/plain",
+    "contents":[
+        "Hello",
+        "World"
+    ]
+}
+```
+
+Expected response from `proxyApi`: 
+
+``` JSON
+{
+  "translations": [
+    {
+      "translatedText": "Bonjour"
+    },
+    {
+      "translatedText": "Monde"
+    }
+  ]
+}
+```
 
 ## Usage
 
@@ -24,9 +55,8 @@ googleTranslate.init({
 
 ```
 
-> googleTranslate does not handle API authentication. You will need to provide googleTranslate with a proxy URL i.e. `apiProxy`. This URL should forward the incoming POST payload from `googleTranslate` along with the valid OAuth 2.0 headers and API key param required by Google Cloud Translation API.
 
-3. **Translate**
+1. **Translate**
 
 To change the language, call `googleTranslate.setTargetLanguage` method with the target language code. E.g. for French:
 
@@ -44,7 +74,7 @@ Language preference is stored in `localStorage` with the key of `gTranslate_lang
 var langPreference = localStorage.getItem('gTranslate_lang');
 ```
 
-## Hooking up to a language `<select>` field
+## Handling language change
 
 The following example shows how a user can switch the language based on a `<select>` field: 
 
