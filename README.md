@@ -44,7 +44,9 @@ Language preference is stored in `localStorage` with the key of `gTranslate_lang
 var langPreference = localStorage.getItem('gTranslate_lang');
 ```
 
-A more complete example with a select dropdown: 
+## Hooking up to a language `<select>` field
+
+The following example demonstrates 
 
 **HTML**
 ``` html
@@ -57,18 +59,26 @@ A more complete example with a select dropdown:
 
 **JavaScript**
 ``` Javascript
+//get <select id="select-lang"> element
 var langSelectField = document.getElementById('select-lang');
-langSelectField.value = localStorage.getItem('googleTranslate_lang');
 
+//get language preference and set it as default value for language `<select>` field
+langSelectField.value = localStorage.getItem('gTranslate_lang');
+
+//listen for `<select>` change event
 langSelectField.addEventListener('change', function(e) {
+
     var translatePromise = googleTranslate.setTargetLanguage(e.target.value);
     console.log("translating...");
+    
     translatePromise.then(function(response) {
+      
       if(response) {
           console.log('translation completed')
       } else {
           console.log('translation failed');
       }
+      
     }); 
 });
 ```
