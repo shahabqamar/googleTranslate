@@ -36,6 +36,8 @@ googleTranslate.setTargetLanguage('fr');
 
 The `googleTranslate.setTargetLanguage` method returns a promise which can be used to detect completion of page translation action. This can be useful if you want to show a loading screen or graphic as googleTranslate can take a few seconds to complete the translation process. 
 
+## Persisting language preference
+
 Language preference is stored in `localStorage` with the key of `gTranslate_lang`. This is useful to keep the user preference persistent as they navigate from page to page on your website. To retrieve the language preference, simply run: 
 
 ``` Javascript
