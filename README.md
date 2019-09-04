@@ -46,7 +46,7 @@ var langPreference = localStorage.getItem('gTranslate_lang');
 
 ## Hooking up to a language `<select>` field
 
-The following example demonstrates 
+The following example shows how a user can switch the language based on a `<select>` field: 
 
 **HTML**
 ``` html
@@ -78,7 +78,7 @@ langSelectField.addEventListener('change', function(e) {
       } else {
           console.log('translation failed');
       }
-      
+
     }); 
 });
 ```
