@@ -1,4 +1,4 @@
-var gTranslate = {
+var googleTranslate = {
   //config & defaults
   apiProxy: "",
   translationNode: document.body,
