@@ -4,7 +4,7 @@ googleTranslate is a JavaScript library which uses with Google Cloud Translation
 
 > googleTranslate does not handle API authentication. You will need to provide googleTranslate with a proxy URL i.e. `apiProxy`. This URL should forward the incoming POST payload from `googleTranslate` along with the valid OAuth 2.0 headers and API key param required by Google Cloud Translation API.
 
-An example of payload send by googleTranslate to `proxyApi` endpoint: 
+An example of `POST` payload send by googleTranslate to `proxyApi` endpoint: 
 
 ``` JSON
 {
@@ -55,8 +55,7 @@ googleTranslate.init({
 
 ```
 
-
-1. **Translate**
+3. **Translate**
 
 To change the language, call `googleTranslate.setTargetLanguage` method with the target language code. E.g. for French:
 
