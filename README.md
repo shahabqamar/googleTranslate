@@ -2,7 +2,7 @@
 
 googleTranslate is a JavaScript library which uses with Google Cloud Translation API (v3beta1) to translate webpages. It is meant to provide a replacement/alternative for the now deprecated Google Translate for websites: https://translate.google.com/intl/en/about/website. 
 
-> googleTranslate does not handle API authentication. You will need to provide googleTranslate with a proxy URL i.e. `apiProxy`. This URL should forward the incoming POST payload from `googleTranslate` along with the valid OAuth 2.0 headers and API key param required by Google Cloud Translation API.
+> googleTranslate does not handle API authentication. You will need to provide googleTranslate with a proxy URL as part of configuration i.e. `apiProxy`. This URL should forward the incoming POST payload from `googleTranslate` along with the valid OAuth 2.0 headers and API key param if set to be required by Google Cloud Translation API.
 
 An example of `POST` payload send by googleTranslate to `proxyApi` endpoint: 
 
@@ -40,7 +40,7 @@ Expected response from `proxyApi`:
 Include googleTranslate on your website (ideally in the `<HEAD>` section) using a script tag:
 
 ``` html
-<script type="text/javascript src="path_to_file/googleTranslate.js"></script>
+<script type="text/javascript" src="./path/googleTranslate.js"></script>
 ```
 
 2. **Initialize googleTranslate**
@@ -64,6 +64,8 @@ googleTranslate.setTargetLanguage('fr');
 ```
 
 The `googleTranslate.setTargetLanguage` method returns a promise which can be used to detect completion of page translation action. This can be useful if you want to show a loading screen or graphic as googleTranslate can take a few seconds to complete the translation process. 
+
+> Setting the translation back to source language after a translation triggers a page reload. 
 
 ## Persisting language preference
 
@@ -97,9 +99,12 @@ langSelectField.value = localStorage.getItem('gTranslate_lang');
 //listen for `<select>` change event
 langSelectField.addEventListener('change', function(e) {
 
+    //translate page
     var translatePromise = googleTranslate.setTargetLanguage(e.target.value);
     console.log("translating...");
     
+    //promise returns a boolean 
+    //indicating success/failure of translation
     translatePromise.then(function(response) {
       
       if(response) {
@@ -112,4 +117,4 @@ langSelectField.addEventListener('change', function(e) {
 });
 ```
 
-
+## Configuration options
