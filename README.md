@@ -119,7 +119,7 @@ langSelectField.addEventListener('change', function(e) {
 });
 ```
 
-## A more complete JavaScript Example (using jQuery)
+## A more complete JavaScript Example
 
 
 **Include in your markup (before the googleTranslate script)**
