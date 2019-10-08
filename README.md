@@ -133,55 +133,65 @@ langSelectField.addEventListener('change', function(e) {
 **Javascript in your main scripts file (after googleTranslate script)**
 
 ```Javascript
-(function ($) {
+window.addEventListener("load", event => {
+    
+    //append translation in progress popup to body
+    document.body.innerHTML +=
+        '<div id="google_translate_popup">Translating...</div>';
 
-    //append translation in progress popup (relevant css included below)
-    $("body").append('<div id="google_translate_popup">Translating...</div>');
-
-    var errorMsg = "There was a problem with translating this page. Please refresh the page and try again. If the problem persists, please contact the website administrator."
-
-    //if select input found
     if (document.getElementById("select-lang") !== null) {
-
-        //init googleTranslate
+        //init google translate library
         var gtranslateInit = googleTranslate.init({
-                apiProxy: window.googleTranslateApiProxy, //set as a global var
-                excludeElements: [document.getElementById("select-lang")],
-                sourceLanguage: "en"
-            });
-        
-        //when init promise resolves
-        gtranslateInit.then(function (response) {
-            $("#google_translate_popup").fadeOut();
+            apiProxy: window.googleTranslateApiProxy,
+            excludeElements: [document.getElementById("select-lang")],
+            sourceLanguage: "en"
+        });
+
+        //when translation completes
+        gtranslateInit.then(function(response) {
+            document.getElementById("google_translate_popup").style.display =
+                "none";
             if (!response) {
-                alert(errorMsg);
+                alert(
+                    "There was a problem with translating this page. Please refresh the page and try again. If the problem persists, please contact the website administrator."
+                );
             }
         });
 
         var langSelectField = document.getElementById("select-lang");
 
-        //if language preference found, set it as default on select input
-        if (localStorage.getItem("gTranslate_lang") !== null && localStorage.getItem("gTranslate_lang") !== "") {
+        //check language preference in localStorage
+        if (
+            localStorage.getItem("gTranslate_lang") !== null &&
+            localStorage.getItem("gTranslate_lang") !== ""
+        ) {
             langSelectField.value = localStorage.getItem("gTranslate_lang");
         }
 
-        //lang change handler
-        langSelectField.addEventListener("change", function (e) {
+        //on language preference change
+        langSelectField.addEventListener("change", function(e) {
             if (e.target.value !== "" && e.target.value !== "Select language") {
-                var translatePromise = googleTranslate.setTargetLanguage(e.target.value);
-                $("#google_translate_popup").fadeIn();
+                var translatePromise = googleTranslate.setTargetLanguage(
+                    e.target.value
+                );
+                document.getElementById(
+                    "google_translate_popup"
+                ).style.display = "block";
+                translatePromise.then(function(response) {
+                    document.getElementById(
+                        "google_translate_popup"
+                    ).style.display = "none";
 
-                //when translate promise resolves
-                translatePromise.then(function (response) {
-                    $("#google_translate_popup").fadeOut();
                     if (!response) {
-                        alert(errorMsg);
+                        alert(
+                            "There was a problem with translating this page. Please refresh the page and try again. If the problem persists, please contact the website administrator."
+                        );
                     }
                 });
             }
         });
     }
-})(jQuery);
+});
 
 ```
 **CSS to style the 'Translating...' popup**
