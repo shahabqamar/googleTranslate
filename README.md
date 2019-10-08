@@ -1,6 +1,6 @@
 # googleTranslate
 
-googleTranslate is a JavaScript library which uses with Google Cloud Translation API (v3beta1) to translate webpages. It is meant to provide a replacement/alternative for the now deprecated Google Translate for websites: https://translate.google.com/intl/en/about/website.
+googleTranslate is a JavaScript "library" which uses with Google Cloud Translation API (v3beta1) to translate webpages. It is meant to provide a replacement/alternative for the now deprecated Google Translate for websites: https://translate.google.com/intl/en/about/website.
 
 > googleTranslate does not handle API authentication. You will need to provide googleTranslate with a proxy URL as part of configuration i.e. `apiProxy`. This URL should forward the incoming POST payload from `googleTranslate` along with the valid OAuth 2.0 headers and API key param if set to be required by Google Cloud Translation API.
 
@@ -119,7 +119,72 @@ langSelectField.addEventListener('change', function(e) {
 });
 ```
 
-**A more complete JavaScript Example (using jQuery)**
+## A more complete JavaScript Example (using jQuery)
+
+
+**Include in your markup (before the googleTranslate script)**
+
+```html
+<script>
+    window.googleTranslateApiProxy = "https://authenticated_api_endpoint";
+</script>
+```
+
+**Javascript in your main scripts file (after googleTranslate script)**
+
+```Javascript
+(function ($) {
+
+    //append translation in progress popup (relevant css included below)
+    $("body").append('<div id="google_translate_popup">Translating...</div>');
+
+    var errorMsg = "There was a problem with translating this page. Please refresh the page and try again. If the problem persists, please contact the website administrator."
+
+    //if select input found
+    if (document.getElementById("select-lang") !== null) {
+
+        //init googleTranslate
+        var gtranslateInit = googleTranslate.init({
+                apiProxy: window.googleTranslateApiProxy, //set as a global var
+                excludeElements: [document.getElementById("select-lang")],
+                sourceLanguage: "en"
+            });
+        
+        //when init promise resolves
+        gtranslateInit.then(function (response) {
+            $("#google_translate_popup").fadeOut();
+            if (!response) {
+                alert(errorMsg);
+            }
+        });
+
+        var langSelectField = document.getElementById("select-lang");
+
+        //if language preference found, set it as default on select input
+        if (localStorage.getItem("gTranslate_lang") !== null && localStorage.getItem("gTranslate_lang") !== "") {
+            langSelectField.value = localStorage.getItem("gTranslate_lang");
+        }
+
+        //lang change handler
+        langSelectField.addEventListener("change", function (e) {
+            if (e.target.value !== "" && e.target.value !== "Select language") {
+                var translatePromise = googleTranslate.setTargetLanguage(e.target.value);
+                $("#google_translate_popup").fadeIn();
+
+                //when translate promise resolves
+                translatePromise.then(function (response) {
+                    $("#google_translate_popup").fadeOut();
+                    if (!response) {
+                        alert(errorMsg);
+                    }
+                });
+            }
+        });
+    }
+})(jQuery);
+
+```
+**CSS to style the 'Translating...' popup**
 
 ```css
 #google_translate_popup {
@@ -132,57 +197,6 @@ langSelectField.addEventListener('change', function(e) {
     border: 1px solid #fafafa;
     display: none;
 }
-```
-
-```html
-<script>
-    window.googleTranslateApiProxy = "https://authenticated_api_endpoint";
-</script>
-```
-
-```Javascript
-(function ($) {
-
-  $("body").append('<div id="google_translate_popup">Translating...</div>');
-
-  var errorMsg = "There was a problem with translating this page. Please refresh the page and try again. If the problem persists, please contact the website administrator."
-
-  if (document.getElementById("select-lang") !== null) {
-    var gtranslateInit = googleTranslate.init({
-      apiProxy: window.googleTranslateApiProxy,
-      //set as a global var in Head
-      excludeElements: [document.getElementById("select-lang")],
-      sourceLanguage: "en"
-    });
-    gtranslateInit.then(function (response) {
-      $("#google_translate_popup").fadeOut();
-
-      if (!response) {
-        alert(errorMsg);
-      }
-    });
-    var langSelectField = document.getElementById("select-lang");
-
-    if (localStorage.getItem("gTranslate_lang") !== null && localStorage.getItem("gTranslate_lang") !== "") {
-      langSelectField.value = localStorage.getItem("gTranslate_lang");
-    }
-
-    langSelectField.addEventListener("change", function (e) {
-      if (e.target.value !== "" && e.target.value !== "Select language") {
-        var translatePromise = googleTranslate.setTargetLanguage(e.target.value);
-        $("#google_translate_popup").fadeIn();
-        translatePromise.then(function (response) {
-          $("#google_translate_popup").fadeOut();
-
-          if (!response) {
-            alert(errorMsg);
-          }
-        });
-      }
-    });
-  }
-})(jQuery);
-
 ```
 
 ## Configuration options
