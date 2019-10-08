@@ -190,7 +190,6 @@ var googleTranslate = {
 
         //check lang pref. and set if different from src lang
         if (targetLanguage !== null && targetLanguage !== this.sourceLanguage) {
-            $("#google_translate_popup").fadeIn();
             return this.setTargetLanguage(targetLanguage);
         } else {
             return new Promise(function(resolve, reject) {
