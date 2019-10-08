@@ -8,6 +8,7 @@ var googleTranslate = {
     nodeListSourceLanguage: [],
     nodeListTextLanguage: [],
     excludeElements: [],
+    mutatationIds: [],
     sourceLanguage: "",
     targetLanguage: "",
 
