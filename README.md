@@ -1,12 +1,12 @@
 # googleTranslate
 
-googleTranslate is a JavaScript library which uses with Google Cloud Translation API (v3beta1) to translate webpages. It is meant to provide a replacement/alternative for the now deprecated Google Translate for websites: https://translate.google.com/intl/en/about/website. 
+googleTranslate is a JavaScript library which uses with Google Cloud Translation API (v3beta1) to translate webpages. It is meant to provide a replacement/alternative for the now deprecated Google Translate for websites: https://translate.google.com/intl/en/about/website.
 
 > googleTranslate does not handle API authentication. You will need to provide googleTranslate with a proxy URL as part of configuration i.e. `apiProxy`. This URL should forward the incoming POST payload from `googleTranslate` along with the valid OAuth 2.0 headers and API key param if set to be required by Google Cloud Translation API.
 
-An example of `POST` payload send by googleTranslate to `proxyApi` endpoint: 
+An example of `POST` payload send by googleTranslate to `proxyApi` endpoint:
 
-``` JSON
+```JSON
 {
     "sourceLanguageCode":"en",
     "targetLanguageCode":"fr",
@@ -18,9 +18,9 @@ An example of `POST` payload send by googleTranslate to `proxyApi` endpoint:
 }
 ```
 
-Expected response from `proxyApi`: 
+Expected response from `proxyApi`:
 
-``` JSON
+```JSON
 {
   "translations": [
     {
@@ -39,7 +39,7 @@ Expected response from `proxyApi`:
 
 Include googleTranslate on your website (ideally in the `<HEAD>` section) using a script tag:
 
-``` html
+```html
 <script type="text/javascript" src="./path/googleTranslate.js"></script>
 ```
 
@@ -47,7 +47,7 @@ Include googleTranslate on your website (ideally in the `<HEAD>` section) using 
 
 Call the `init` method and pass the required configuration:
 
-``` Javascript
+```Javascript
 googleTranslate.init({
     apiProxy: "URL_to_authenticated_API_endpoint",
     sourceLanguage: "en",
@@ -63,33 +63,35 @@ To change the language, call `googleTranslate.setTargetLanguage` method with the
 googleTranslate.setTargetLanguage('fr');
 ```
 
-The `googleTranslate.setTargetLanguage` method returns a promise which can be used to detect completion of page translation action. This can be useful if you want to show a loading screen or graphic as googleTranslate can take a few seconds to complete the translation process. 
+The `googleTranslate.setTargetLanguage` method returns a promise which can be used to detect completion of page translation action. This can be useful if you want to show a loading screen or graphic as googleTranslate can take a few seconds to complete the translation process.
 
-> Setting the translation back to source language after a translation triggers a page reload. 
+> Setting the translation back to source language after a translation triggers a page reload.
 
 ## Persisting language preference
 
-Language preference is stored in `localStorage` with the key of `gTranslate_lang`. This is useful to keep the user preference persistent as they navigate from page to page on your website. To retrieve the language preference, simply run: 
+Language preference is stored in `localStorage` with the key of `gTranslate_lang`. This is useful to keep the user preference persistent as they navigate from page to page on your website. To retrieve the language preference, simply run:
 
-``` Javascript
+```Javascript
 var langPreference = localStorage.getItem('gTranslate_lang');
 ```
 
 ## Handling language change
 
-The following example shows how a user can switch the language based on a `<select>` field: 
+The following example shows how a user can switch the language based on a `<select>` field:
 
 **HTML**
-``` html
+
+```html
 <select id="select-lang">
-    <option value="en">English</option>
-    <option value="fr">French</option>
-    <option value="ru">Russian</option>
+  <option value="en">English</option>
+  <option value="fr">French</option>
+  <option value="ru">Russian</option>
 </select>
 ```
 
 **JavaScript**
-``` Javascript
+
+```Javascript
 //get <select id="select-lang"> element
 var langSelectField = document.getElementById('select-lang');
 
@@ -102,18 +104,18 @@ langSelectField.addEventListener('change', function(e) {
     //translate page
     var translatePromise = googleTranslate.setTargetLanguage(e.target.value);
     console.log("translating...");
-    
-    //promise returns a boolean 
+
+    //promise returns a boolean
     //indicating success/failure of translation
     translatePromise.then(function(response) {
-      
+
       if(response) {
           console.log('translation completed')
       } else {
           console.log('translation failed');
       }
 
-    }); 
+    });
 });
 ```
 
